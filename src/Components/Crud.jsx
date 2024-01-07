@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { app, auth } from "./Firebase";
 import { getDatabase, ref, push, onValue, update, remove } from "firebase/database";
-// import { useDispatch, useSelector } from "react-redux";
 
 function Curd() {
     const database = getDatabase(app);
@@ -16,8 +15,8 @@ function Curd() {
 
     const userlist = () => {
         const userRef = ref(database, "user");
-        onValue(userRef, (snapshot) => {
-            const data = snapshot.val();
+        onValue(userRef, (userdata) => {
+            const data = userdata.val();
             if (data) {
                 const list = Object.keys(data).map((id) => ({ id, ...data[id] }));
                 setUser(list)
@@ -73,30 +72,30 @@ function Curd() {
         <div>
             <h1 className="text-center">Crud Operation</h1>
             <form onSubmit={handleSubmit} className="m-auto col-3">
-                <label htmlFor="name">Name</label>
-                <input type="text" class="form-control" name="name" value={input ? input.name : ""} onChange={handleChange} />
-                <label htmlFor="email">Email</label>
-                <input type="email" class="form-control mb-2" name="email" value={input ? input.email : ""} onChange={handleChange} />
-                <button className="btn btn-primary">{edit ? 'Update' : 'Add'}</button>
+                <label htmlFor="name">Name :</label>
+                <input type="text" className="form-control mb-3" name="name" placeholder="Enter your name" value={input ? input.name : ""} onChange={handleChange} />
+                <label htmlFor="email">Email :</label>
+                <input type="email" className="form-control mb-3" name="email" placeholder="Enter your email" value={input ? input.email : ""} onChange={handleChange} />
+                <button className="btn btn-success form-control mt-1">{edit ? 'Update' : 'Add'}</button>
             </form>
-            <table className="table table-hover">
+            <table className="table  mt-3">
                 <thead>
                     <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Action</th>
+                        <th className="col-3 text-center">Id</th>
+                        <th className="col-3 text-center">Name</th>
+                        <th className="col-3 text-center">Email</th>
+                        <th className="col-3 text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {user && user.map((item, index) => (
-                        <tr key={item.id}>
+                        <tr key={item.id} className="col-3 text-center">
                             <td scope="row">{index + 1}</td>
-                            <td>{item.name}</td>
-                            <td>{item.email}</td>
+                            <td className="col-3 text-center">{item.name}</td>
+                            <td className="col-3 text-center">{item.email}</td>
                             <td>
-                                <button className="btn btn-danger mx-2" onClick={() => handleDelete(item.id)}>Delete</button>
-                                <button className="btn btn-warning" onClick={() => handleEdit(item.id)}>Edit</button>
+                                <button className="btn col-3 text-center btn-warning text-white" onClick={() => handleEdit(item.id)}><i class="fa-regular fa-pen-to-square"></i></button>
+                                <button className="btn col-3 text-center btn-danger mx-2 text-white" onClick={() => handleDelete(item.id)}><i class="fa-regular fa-trash-can"></i></button>
                             </td>
                         </tr>
                     ))}
